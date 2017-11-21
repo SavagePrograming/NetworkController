@@ -1,14 +1,11 @@
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -60,16 +57,21 @@ public class ControlerGui extends Application {
 
             BorderPane pane = new BorderPane();
 
-            pane.setTop(makeTopControls());
+            VBox box = new VBox();
 
-            pane.setBottom(makeBottomControls());
+            box.getChildren().add(makePlayControls());
 
-            pane.setCenter(makeCenterControls());
+            box.getChildren().add(makeInfectionControls());
 
+            box.getChildren().add(makeConnectControls());
+
+            box.getChildren().add(makeCreationControls());
+
+            pane.setCenter(box);
             Scene scene = new Scene(pane);
-
-            primaryStage.setWidth(WIDTH);
-            primaryStage.setHeight(HEIGHT);
+//
+//            primaryStage.setWidth(WIDTH);
+//            primaryStage.setHeight(HEIGHT);
 
 
             primaryStage.setScene(scene);
@@ -84,7 +86,7 @@ public class ControlerGui extends Application {
 
     }
 
-    public HBox makeTopControls() {
+    public HBox makePlayControls() {
         HBox pane = new HBox();
         Button step = new Button("Step");
         Button play = new Button("Play");
@@ -128,7 +130,7 @@ public class ControlerGui extends Application {
     }
 
 
-    public HBox makeCenterControls(){
+    public HBox makeConnectControls(){
         HBox pane = new HBox();
         TextField Name1 = new TextField("Name 1");
         TextField Name2 = new TextField("Name 2");
@@ -149,13 +151,14 @@ public class ControlerGui extends Application {
 
 
     }
-    public HBox makeBottomControls(){
+
+    public HBox makeInfectionControls(){
         HBox pane = new HBox();
         TextField Name = new TextField("Name");
         ChoiceBox<State> Effect = new ChoiceBox<>();
-        Button connect = new Button("Connect");
+        Button change = new Button("Effect");
 
-        connect.setOnMouseClicked(
+        change.setOnMouseClicked(
                 new EventHandler<MouseEvent>() {
                     @Override public void handle(MouseEvent e) {
                         serverConn.change(Effect.getValue(), Name.getText());
@@ -164,7 +167,34 @@ public class ControlerGui extends Application {
 
         pane.getChildren().add(Name);
         pane.getChildren().add(Effect);
-        pane.getChildren().add(connect);
+        pane.getChildren().add(change);
+
+        return pane;
+    }
+
+    public HBox makeCreationControls(){
+        HBox pane = new HBox();
+        TextField Name = new TextField("Name");
+        Button create = new Button("Create");
+        Button delete = new Button("delete");
+
+        create.setOnMouseClicked(
+                new EventHandler<MouseEvent>() {
+                    @Override public void handle(MouseEvent e) {
+                        serverConn.create(Name.getText());
+                    }
+                });
+
+        delete.setOnMouseClicked(
+                new EventHandler<MouseEvent>() {
+                    @Override public void handle(MouseEvent e) {
+                        serverConn.delete(Name.getText());
+                    }
+                });
+
+        pane.getChildren().add(Name);
+        pane.getChildren().add(create);
+        pane.getChildren().add(delete);
 
         return pane;
     }

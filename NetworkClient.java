@@ -106,7 +106,7 @@ public class NetworkClient {
             this.sock = new Socket(hostname, port);
             this.networkIn = new Scanner(sock.getInputStream());
             this.networkOut = new PrintStream(sock.getOutputStream());
-            initalConnect();
+            initalConnect(width, height);
 
         } catch (UnknownHostException e) {
             e.printStackTrace();

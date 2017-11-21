@@ -91,6 +91,7 @@ public class NetworkServer {
     public NetworkServer(int port, Network model){
         try {
             this.server = new ServerSocket(port);
+            System.out.println("Waiting For Controller to Connect");
             this.sock = server.accept();
             System.out.println("Controller Connected");
             this.networkIn = new Scanner( sock.getInputStream() );
