@@ -14,8 +14,8 @@ import java.util.Map;
 
 public class ControlerGui extends Application {
     final int TIME = 1000;
-    final int HEIGHT = 160;
-    final int WIDTH = 300;
+//    final int HEIGHT = 160;
+//    final int WIDTH = 300;
 
     private Map< String, String > params = null;
 
@@ -47,7 +47,7 @@ public class ControlerGui extends Application {
     public void start(Stage primaryStage) {
         try {
             Network model = new Network();
-            serverConn = new NetworkClient(getParamNamed("host"), Integer.parseInt(getParamNamed("port")));
+            serverConn = new NetworkClient(getParamNamed("host"), Integer.parseInt(getParamNamed("port")), 500, 500);
 //            System.out.println(model.);
 
 

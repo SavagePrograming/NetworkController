@@ -92,6 +92,7 @@ public class NetworkGui extends Application implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
         if (o instanceof  Network){
             gc.setFill(Color.RED);
             for (Node n: ((Network) o).getNodes().values()){
