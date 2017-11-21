@@ -67,6 +67,8 @@ public class ControlerGui extends Application {
 
             box.getChildren().add(makeCreationControls());
 
+            box.getChildren().add(makeMoveControls());
+
             pane.setCenter(box);
             Scene scene = new Scene(pane);
 //
@@ -199,6 +201,28 @@ public class ControlerGui extends Application {
         return pane;
     }
 
+    public HBox makeMoveControls(){
+        HBox pane = new HBox();
+        TextField Name1 = new TextField("Name");
+        TextField indexX = new TextField("X");
+        TextField indexY = new TextField("Y");
+        Button Move = new Button("Move");
 
+         Move.setOnMouseClicked(
+                new EventHandler<MouseEvent>() {
+                    @Override public void handle(MouseEvent e) {
+                        serverConn.move(Name1.getText(), Integer.parseInt(indexX.getText()), Integer.parseInt(indexY.getText()));
+                    }
+                });
+
+        pane.getChildren().add(Name1);
+        pane.getChildren().add(indexX);
+        pane.getChildren().add(indexY);
+        pane.getChildren().add(Move);
+
+        return pane;
+
+
+    }
 
 }

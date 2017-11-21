@@ -12,6 +12,8 @@ public interface Protocol {
 
     String ERROR = "Error";
 
+    String MOVE = "Move";
+
     String CHANGE = "Change";
 
     String INFECTED = "Infected";

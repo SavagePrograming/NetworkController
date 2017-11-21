@@ -18,24 +18,24 @@ public class Node{
         this.name = name;
         this.nodes = new HashMap<>();
         this.state = State.Susceptible;
-        x = 0;
-        y = 0;
+        x = 100;
+        y = 100;
     }
     
     public Node(String name, HashMap<String, Node> nodes){
         this.name = name;
         this.nodes = nodes;
         this.state = State.Susceptible;
-        x = 0;
-        y = 0;
+        x = 100;
+        y = 100;
     }
 
     public Node(String name, HashMap<String, Node> nodes, State state){
         this.name = name;
         this.nodes = nodes;
         this.state = state;
-        x = 0;
-        y = 0;
+        x = 100;
+        y = 100;
     }
     
     public void spreadInfection(double probability, int maxTime, int minTime){
@@ -84,6 +84,29 @@ public class Node{
 
     public HashMap<String, Node> getNodes() {
         return nodes;
+    }
+
+    @Override
+    public String toString() {
+        String str = "{(" + this.x +", " + this.y + ") State:";
+        switch (this.state){
+            case Susceptible:
+                return str + "Susceptible}";
+            case Infected:
+                return str + "Infected}";
+            case Dead:
+                return str + "Dead}";
+            case Immune:
+                return str + "Immune}";
+            case Resistant:
+                return str + "Resistant}";
+        }
+        return str + "Unknown}";
+    }
+
+    public void setXY(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 }
 

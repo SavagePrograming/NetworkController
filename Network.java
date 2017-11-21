@@ -60,6 +60,12 @@ public class Network extends Observable{
         this.nodes.get(name1).connect(name2, this.nodes.get(name2));
     }
 
+    public void move(String name, int x, int y){
+        this.nodes.get(name).setXY(x,y);
+        super.setChanged();
+        super.notifyObservers();
+    }
+
     public void setDim(int width, int height) {
         this.width = width;
         this.height = height;
@@ -76,22 +82,26 @@ public class Network extends Observable{
         super.notifyObservers();
     }
 
-    public void create(String name){
+    public synchronized void create(String name){
         this.nodes.put(name, new Node(name));
+        super.setChanged();
+        super.notifyObservers();
     }
 
-    public void run(int timeStep){
+    public synchronized void run(int timeStep){
         this.On = true;
         NetworkRunner runner = new NetworkRunner(this, timeStep);
         runner.start();
     }
 
-    public void stop(){
+    public synchronized void stop(){
         this.On = false;
     }
 
-    public void delete(String name){
+    public synchronized  void delete(String name){
         this.nodes.remove(name);
+        super.setChanged();
+        super.notifyObservers();
     }
 
     public void close(){

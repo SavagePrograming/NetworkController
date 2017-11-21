@@ -3,6 +3,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class NetworkGui extends Application implements Observer {
-    int SIZE = 10;
+    int SIZE = 50;
     /**
      * Connection to network interface to server
      */
@@ -60,12 +61,9 @@ public class NetworkGui extends Application implements Observer {
 //            System.out.println(model.);
 
 
-            System.out.println( "start called." );
-            System.out.println( "start may process the command line." );
-            System.out.println( "start builds [and shows] the GUI." );
 
             BorderPane pane = new BorderPane();
-            canvas = new Canvas();
+            canvas = new Canvas(height, width);
             pane.setCenter(canvas);
 
             Scene scene = new Scene( pane );
@@ -76,7 +74,7 @@ public class NetworkGui extends Application implements Observer {
 
 
             primaryStage.setScene(scene);
-            primaryStage.setTitle( "Reversi" );
+            primaryStage.setTitle( "Network Viewer" );
             primaryStage.show();
 
             model.addObserver(this);
@@ -95,11 +93,14 @@ public class NetworkGui extends Application implements Observer {
     public void update(Observable o, Object arg) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         if (o instanceof  Network){
+            gc.setFill(Color.RED);
             for (Node n: ((Network) o).getNodes().values()){
-                gc.fillOval(n.getX() + SIZE / 2, n.getY() + SIZE / 2, SIZE, SIZE);
-                for (Node n2: n.getNodes().values()){
-                    gc.strokeLine(n.getX(), n.getY(), n2.getX(), n2.getY());
-                }
+                System.out.println(n);
+                System.out.println((n.getX() - SIZE / 2) + "  " +( n.getY() - SIZE / 2 )+ "  " +  SIZE + "  " +  SIZE);
+                gc.fillOval(n.getX() - SIZE / 2, n.getY() - SIZE / 2, SIZE, SIZE);
+//                for (Node n2: n.getNodes().values()){
+//                    gc.strokeLine(n.getX(), n.getY(), n2.getX(), n2.getY());
+//                }
             }
         }
 

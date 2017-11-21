@@ -85,7 +85,6 @@ public class NetworkClient {
      * @param hostname the name of the host running the server program
      * @param port     the port of the server socket on which the server is
      *                 listening
-     * @param model    the local object holding the state of the network that
      *                 must be updated upon receiving server message
      */
     public NetworkClient(String hostname, int port) {
@@ -121,6 +120,10 @@ public class NetworkClient {
 
     public void initalConnect(int width, int height){
         this.networkOut.println(Protocol.INITIAL_CONNECT + " " + width + " " + height);
+    }
+
+    public void move(String name, int x, int y){
+        this.networkOut.println(Protocol.MOVE + " " + name + " " + x + " " + y);
     }
 
     public void connect(String name1, String name2){

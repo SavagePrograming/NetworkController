@@ -82,7 +82,6 @@ public class NetworkServer {
      * Afterwards a thread that listens for server messages and forwards
      * them to the network object is started.
      *
-     * @param hostname the name of the host running the server program
      * @param port     the port of the server socket on which the server is
      *                 listening
      * @param model    the local object holding the state of the network that
@@ -135,6 +134,7 @@ public class NetworkServer {
     }
 
     public void create(String arguments ){
+        System.out.println(":{");
         String fields[] = arguments.trim().split( " " );
         String name1 =  fields[ 0 ];
         this.network.create(name1);
@@ -205,6 +205,10 @@ public class NetworkServer {
     public void step(){
         this.network.runOnce();
     }
+    public void move(String arguments){
+        String[] args = arguments.split(" ");
+        this.network.move(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+    }
 
     public void pause(){
         this.network.stop();
@@ -224,7 +228,7 @@ public class NetworkServer {
                 String request = this.networkIn.next();
                 String arguments = this.networkIn.nextLine().trim();
                 NetworkServer.dPrint( "Net message in = \"" + request + '"' );
-
+                System.out.println(request);
                 switch ( request ) {
                     case Protocol.INITIAL_CONNECT:
                         // This should not happen because NetworkServer
@@ -243,6 +247,9 @@ public class NetworkServer {
                         break;
                     case Protocol.ERROR:
                         error( arguments );
+                        break;
+                    case Protocol.MOVE:
+                        move(arguments);
                         break;
                     case Protocol.EXIT:
                         close();
