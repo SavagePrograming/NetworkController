@@ -48,11 +48,12 @@ public class Terminal extends Application {
     public void start(Stage primaryStage) {
         try {
 //            System.out.println(model.);
-            if (params.containsKey("width") && params.containsKey("height")){
+            if (getParamNamed("width") == "" || getParamNamed("height") == ""){
+                terminalCleint = new TerminalCleint(getParamNamed("host"), Integer.parseInt(getParamNamed("port")));
+
+            }else {
                 terminalCleint = new TerminalCleint(getParamNamed("host"), Integer.parseInt(getParamNamed("port")),
                         Integer.parseInt(getParamNamed("width")), Integer.parseInt(getParamNamed("height")));
-            }else {
-                terminalCleint = new TerminalCleint(getParamNamed("host"), Integer.parseInt(getParamNamed("port")));
             }
 
 
@@ -70,11 +71,6 @@ public class Terminal extends Application {
                         public void handle(ActionEvent e) {
                             terminalCleint.send(textField.getText());
                         }
-                    });
-
-            textField.setOnMouseClicked(
-                    new EventHandler<MouseEvent>() {
-                        @Override
                         public void handle(MouseEvent e) {
                             textField.setText("");
                         }
