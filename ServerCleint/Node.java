@@ -1,5 +1,6 @@
+package ServerCleint;
+
 import java.util.HashMap;
-import java.util.Observable;
 
 enum State{
     Susceptible, Infected, Dead, Immune, Resistant

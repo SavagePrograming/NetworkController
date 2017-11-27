@@ -1,32 +1,18 @@
-import com.sun.org.apache.xpath.internal.SourceTree;
-import javafx.animation.ScaleTransition;
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+package ServerCleint;
 
-import javax.xml.soap.Text;
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Scanner;
 
 public class TerminalCleint{
     final String READ = "Read";
     final int WIDTH = 400;
     final int HEIGHT = 400;
-    Socket sock;
-    Scanner networkIn;
+    private boolean write = false;
+    private String writeFileName;
+    private Socket sock;
+    private Scanner networkIn;
     private PrintStream networkOut;
     final int TIME = 1000;
 
@@ -60,6 +46,11 @@ public class TerminalCleint{
 
     public void initalConnect(int width, int height){
         this.networkOut.println(Protocol.INITIAL_CONNECT + " " + width + " " + height);
+    }
+
+    public void setWriteFileName(String writeFileName){
+        this.write = true;
+        this.writeFileName = writeFileName;
     }
 
     public void send(String input){

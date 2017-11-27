@@ -1,3 +1,5 @@
+package ServerCleint;
+
 public interface Protocol {
 
     String INITIAL_CONNECT = "Initial_Connect";

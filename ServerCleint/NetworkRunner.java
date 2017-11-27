@@ -1,3 +1,5 @@
+package ServerCleint;
+
 public class NetworkRunner extends Thread {
 
     Network net;

@@ -1,8 +1,9 @@
+package ServerCleint;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 
