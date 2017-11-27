@@ -5,18 +5,18 @@ Change ["Resistant"|"Immune"|"Infected"|"Dead"|"Susceptible"][Name]
 Clear
 Connections
 Delete [Name]
-Dead ["All"|Name]
+Dead ["All"|"Random"|Name]
 Error [Message]
 Exit
 Initial_Connect [Width] [Height]
-Infected ["All"|Name]
-Immune ["All"|Name]
+Infected ["All"|"Random"|Name]
+Immune ["All"|"Random"|Name]
 Move [Name] [X] [Y]
 Onoff [time]
-Resistant ["All"|Name]
+Resistant ["All"|"Random"|Name]
 Step
 Start [time]
 Stop
-Susceptible ["All"|Name]
+Susceptible ["All"|"Random"|Name]
 Text
 Zoom [scale]

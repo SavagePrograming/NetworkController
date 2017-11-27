@@ -117,8 +117,15 @@ public class NetworkGui extends Application implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o instanceof  Network){
 
+        if (o instanceof  Network){
+            if (!((Network) o).isActive()){
+                try {
+                    this.stop();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             this.canvas.setHeight(((Network) o).getHeight());
             this.canvas.setWidth(((Network) o).getWidth());
 
@@ -154,4 +161,5 @@ public class NetworkGui extends Application implements Observer {
         }
 
     }
+
 }

@@ -99,4 +99,10 @@ public class Terminal extends Application {
         }
 
     }
+
+    @Override
+    public void stop() throws Exception {
+        terminalCleint.error("Quit");
+        super.stop();
+    }
 }

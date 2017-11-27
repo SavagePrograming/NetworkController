@@ -1,3 +1,4 @@
+import com.sun.org.apache.xpath.internal.SourceTree;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -111,7 +112,8 @@ public class TerminalCleint{
                 this.send(command);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("File is in Valid: " + fileName);
+
         }
     }
 }
