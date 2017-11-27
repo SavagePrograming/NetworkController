@@ -1,0 +1,12 @@
+Create a
+Create b
+Create c
+Create d
+Move a 100 100
+Move b 100 300
+Move c 300 300
+Move d 300 100
+Connect a b
+Connect b c
+Connect c d
+Connect d a

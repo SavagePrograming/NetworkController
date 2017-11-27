@@ -57,12 +57,9 @@ public class Network extends Observable{
     }
 
     public synchronized void connect(String name1, String name2){
-        System.out.println("name1 = [" + name1 + "], name2 = [" + name2 + "]");
-        for (Node node:this.nodes.values()){
-            System.out.print(node + " ");
-        }
-        System.out.println();
         this.nodes.get(name1).connect(name2, this.nodes.get(name2));
+        super.setChanged();
+        super.notifyObservers();
     }
 
     public void move(String name, int x, int y){

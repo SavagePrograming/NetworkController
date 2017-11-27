@@ -99,9 +99,14 @@ public class NetworkGui extends Application implements Observer {
                 System.out.println(n);
                 System.out.println((n.getX() - SIZE / 2) + "  " +( n.getY() - SIZE / 2 )+ "  " +  SIZE + "  " +  SIZE);
                 gc.fillOval(n.getX() - SIZE / 2, n.getY() - SIZE / 2, SIZE, SIZE);
-//                for (Node n2: n.getNodes().values()){
-//                    gc.strokeLine(n.getX(), n.getY(), n2.getX(), n2.getY());
-//                }
+            }
+
+            gc.setFill(Color.BLUE);
+            for (Node n: ((Network) o).getNodes().values()){
+                for (Node n2: n.getNodes().values()){
+                    gc.strokeLine(n.getX(), n.getY(), n2.getX(), n2.getY());
+                }
+                gc.fillOval(n.getX()  - SIZE/10 / 2, n.getY() - SIZE/10 / 2, SIZE/10, SIZE/10);
             }
         }
 
