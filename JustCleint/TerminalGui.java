@@ -12,14 +12,18 @@ import javafx.stage.Stage;
 import java.util.Map;
 import java.util.Objects;
 
-public class Terminal extends Application {
+public class TerminalGui extends Application {
 
     private Map< String, String > params = null;
 
-    private TerminalCleint terminalCleint;
+    private Controller controller;
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 
     /**
@@ -39,22 +43,15 @@ public class Terminal extends Application {
             return params.get(name);
         }
     }
+
+    public void start(){
+        launch();
+    }
+
+
     @Override
     public void start(Stage primaryStage) {
         try {
-//            System.out.println(model.);
-            if (Objects.equals(getParamNamed("width"), "") || Objects.equals(getParamNamed("height"), "")){
-                terminalCleint = new TerminalCleint(getParamNamed("host"), Integer.parseInt(getParamNamed("port")));
-
-            }else {
-                terminalCleint = new TerminalCleint(getParamNamed("host"), Integer.parseInt(getParamNamed("port")),
-                        Integer.parseInt(getParamNamed("width")), Integer.parseInt(getParamNamed("height")));
-            }
-
-            System.out.println("start called.");
-            System.out.println("start may process the command line.");
-            System.out.println("start builds [and shows] the GUI.");
-
             BorderPane pane = new BorderPane();
 
             TextField textField = new TextField();
@@ -62,9 +59,7 @@ public class Terminal extends Application {
                     new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent e) {
-                            terminalCleint.send(textField.getText());
-                        }
-                        public void handle(MouseEvent e) {
+                            controller.command(textField.getText());
                             textField.setText("");
                         }
                     });
@@ -83,12 +78,12 @@ public class Terminal extends Application {
             primaryStage.show();
 
             if (!getParamNamed("read").equals("")){
-                terminalCleint.readFromFile(getParamNamed("read"));
+                controller.readFromFile(getParamNamed("read"));
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            terminalCleint.error(e.getMessage());
+            controller.error(e.getMessage());
             e.printStackTrace();
         }
 
@@ -96,7 +91,7 @@ public class Terminal extends Application {
 
     @Override
     public void stop() throws Exception {
-        terminalCleint.error("Quit");
+        controller.error("Quit");
         super.stop();
     }
 }

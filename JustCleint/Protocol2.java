@@ -1,6 +1,6 @@
 package JustCleint;
 
-public interface Protocol {
+public interface Protocol2 {
 
     String INITIAL_CONNECT = "Initial_Connect";
 
@@ -21,6 +21,8 @@ public interface Protocol {
     String INFECTED = "Infected";
 
     String SUSCEPTIBLE = "Susceptible";
+
+    String READ = "Read";
 
     String DEAD = "Dead";
 

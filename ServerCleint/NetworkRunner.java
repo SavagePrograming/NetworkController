@@ -1,4 +1,4 @@
-package JustCleint;
+package ServerCleint;
 
 public class NetworkRunner extends Thread {
 

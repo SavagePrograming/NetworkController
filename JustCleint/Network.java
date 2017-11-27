@@ -44,12 +44,12 @@ public class Network extends Observable{
     }
 
     public synchronized void infect(String name){
-        if (name.equals(Protocol.ALL)){
+        if (name.equals(Protocol2.ALL)){
             for (Node n:nodes.values()){
                 n.setState(State.Infected);
                 n.setTimeCounter(((int) (Math.random() * (maxTime - minTime))) + minTime);
             }
-        }else if(name.equals(Protocol.RANDOM)){
+        }else if(name.equals(Protocol2.RANDOM)){
             Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
             n.setState(State.Infected);
             n.setTimeCounter(((int) (Math.random() * (maxTime - minTime))) + minTime);
@@ -61,12 +61,12 @@ public class Network extends Observable{
     }
 
     public synchronized void suseptable(String name){
-        if (name.equals(Protocol.ALL)){
+        if (name.equals(Protocol2.ALL)){
 
             for (Node n:nodes.values()){
                 n.setState(State.Susceptible);
             }
-        }else if(name.equals(Protocol.RANDOM)){
+        }else if(name.equals(Protocol2.RANDOM)){
             Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
             n.setState(State.Susceptible);
 
@@ -76,11 +76,11 @@ public class Network extends Observable{
     }
 
     public synchronized void resistance(String name){
-        if (name.equals(Protocol.ALL)){
+        if (name.equals(Protocol2.ALL)){
             for (Node n:nodes.values()){
                 n.setState(State.Resistant);
             }
-        }else if(name.equals(Protocol.RANDOM)){
+        }else if(name.equals(Protocol2.RANDOM)){
             Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
             n.setState(State.Resistant);
 
@@ -90,11 +90,11 @@ public class Network extends Observable{
     }
 
     public synchronized void immune(String name){
-        if (name.equals(Protocol.ALL)){
+        if (name.equals(Protocol2.ALL)){
             for (Node n:nodes.values()){
                 n.setState(State.Immune);
             }
-        }else if(name.equals(Protocol.RANDOM)){
+        }else if(name.equals(Protocol2.RANDOM)){
             Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
             n.setState(State.Immune);
 
@@ -104,11 +104,11 @@ public class Network extends Observable{
     }
 
     public synchronized void kill(String name){
-        if (name.equals(Protocol.ALL)){
+        if (name.equals(Protocol2.ALL)){
             for (Node n:nodes.values()){
                 n.setState(State.Dead);
             }
-        }else if(name.equals(Protocol.RANDOM)){
+        }else if(name.equals(Protocol2.RANDOM)){
             Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
             n.setState(State.Dead);
 

@@ -1,4 +1,4 @@
-package JustCleint;
+package ServerCleint;
 
 import java.util.HashMap;
 

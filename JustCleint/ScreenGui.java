@@ -13,9 +13,10 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-public class NetworkGui extends Application implements Observer {
-    int SIZE = 20;
-
+public class ScreenGui extends Application implements Observer {
+    final int SIZE = 20;
+    final int WIDTH = 500;
+    final int HEIGHT = 00;
     final Paint INFECTED_COLOR = Color.GREEN;
     final Paint RESISTANT_COLOR = Color.BLUE;
     final Paint SUSEPTABLE_COLOR = Color.RED;
@@ -24,7 +25,7 @@ public class NetworkGui extends Application implements Observer {
     /**
      * Connection to network interface to server
      */
-    private NetworkServer serverConn;
+    private Controller controller;
 
 
     Canvas canvas;
@@ -64,7 +65,7 @@ public class NetworkGui extends Application implements Observer {
     public void start(Stage primaryStage) {
         try{
             Network model = new Network();
-            serverConn = new NetworkServer(Integer.parseInt(getParamNamed("port")), model);
+            controller = new Controller(500,500, model);
             height =  model.getHeight();
             width = model.getWidth();
 //            System.out.println(model.);
@@ -90,7 +91,7 @@ public class NetworkGui extends Application implements Observer {
 
         }catch (Exception e){
             e.printStackTrace();
-            serverConn.error(e.getMessage());
+            controller.error(e.getMessage());
             e.printStackTrace();
         }
 

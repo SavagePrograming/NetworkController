@@ -1,4 +1,4 @@
-package JustCleint;
+package ServerCleint;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;

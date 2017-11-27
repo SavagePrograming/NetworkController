@@ -1,5 +1,6 @@
 package JustCleint;
 
+
 public class NetworkRunner extends Thread {
 
     Network net;
