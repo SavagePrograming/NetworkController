@@ -60,11 +60,23 @@ public class TerminalCleint{
     }
 
     public void send(String input){
-        networkOut.println(input);
+        if (validate(input)){
+            networkOut.println(input);
+        }else{
+            System.out.println("Invalid input");
+        }
     }
 
     public void error(String message){
         this.networkOut.println(Protocol.ERROR + " " + message);
     }
 
+    boolean validate(String input){
+        return input.contains(Protocol.CHANGE ) || input.contains(Protocol.MOVE) ||
+                input.contains(Protocol.INITIAL_CONNECT) || input.contains(Protocol.CONNECT) ||
+                input.contains(Protocol.ERROR ) || input.contains(Protocol.CREATE) ||
+                input.contains(Protocol.EXIT) || input.contains(Protocol.DELETE);
+
+
+    }
 }

@@ -88,7 +88,9 @@ public class Node{
 
     @Override
     public String toString() {
-        String str = "{(" + this.x +", " + this.y + ") State:";
+        String str = "{"+ this.name + ", Location:(" + this.x +", " + this.y + "), Children:(";
+        for (Node n: nodes.values()) str += n.name + " ,";
+        str = str.substring(0, str.length() - 2) + "), State:";
         switch (this.state){
             case Susceptible:
                 return str + "Susceptible}";
