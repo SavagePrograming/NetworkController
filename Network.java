@@ -11,6 +11,10 @@ public class Network extends Observable{
     private boolean Active;
     private boolean Text = true;
     private boolean Connections = true;
+    public final int minTime = 5;
+    public final int maxTime = 10;
+
+    public final double probability = .5;
 
     public HashMap<String, Node> getNodes() {
         return nodes;
@@ -41,18 +45,30 @@ public class Network extends Observable{
     public synchronized void infect(String name){
         if (name.equals(Protocol.ALL)){
             for (Node n:nodes.values()){
-                n.setState(State.Susceptible);
+                n.setState(State.Infected);
+                n.setTimeCounter(((int) (Math.random() * (maxTime - minTime))) + minTime);
             }
+        }else if(name.equals(Protocol.RANDOM)){
+            Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
+            n.setState(State.Infected);
+            n.setTimeCounter(((int) (Math.random() * (maxTime - minTime))) + minTime);
+
         }else{
             this.nodes.get(name).setState(State.Infected);
+            this.nodes.get(name).setTimeCounter(((int) (Math.random() * (maxTime - minTime))) + minTime);
         }
     }
 
     public synchronized void suseptable(String name){
         if (name.equals(Protocol.ALL)){
+
             for (Node n:nodes.values()){
                 n.setState(State.Susceptible);
             }
+        }else if(name.equals(Protocol.RANDOM)){
+            Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
+            n.setState(State.Susceptible);
+
         }else{
             this.nodes.get(name).setState(State.Susceptible);
         }
@@ -61,8 +77,12 @@ public class Network extends Observable{
     public synchronized void resistance(String name){
         if (name.equals(Protocol.ALL)){
             for (Node n:nodes.values()){
-                n.setState(State.Susceptible);
+                n.setState(State.Resistant);
             }
+        }else if(name.equals(Protocol.RANDOM)){
+            Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
+            n.setState(State.Resistant);
+
         }else{
             this.nodes.get(name).setState(State.Resistant);
         }
@@ -71,8 +91,12 @@ public class Network extends Observable{
     public synchronized void immune(String name){
         if (name.equals(Protocol.ALL)){
             for (Node n:nodes.values()){
-                n.setState(State.Susceptible);
+                n.setState(State.Immune);
             }
+        }else if(name.equals(Protocol.RANDOM)){
+            Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
+            n.setState(State.Immune);
+
         }else{
             this.nodes.get(name).setState(State.Immune);
         }
@@ -81,11 +105,16 @@ public class Network extends Observable{
     public synchronized void kill(String name){
         if (name.equals(Protocol.ALL)){
             for (Node n:nodes.values()){
-                n.setState(State.Susceptible);
+                n.setState(State.Dead);
             }
+        }else if(name.equals(Protocol.RANDOM)){
+            Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
+            n.setState(State.Dead);
+
         }else{
             this.nodes.get(name).setState(State.Dead);
         }
+
     }
 
     public synchronized void connectAll(){
@@ -162,7 +191,7 @@ public class Network extends Observable{
 
     public synchronized void runOnce(){
         for (Node n: this.nodes.values()){
-            n.spreadInfection(.5, 10, 5);
+            n.spreadInfection(.5, maxTime, minTime);
         }
         for (Node n: this.nodes.values()){
             n.updateState();
@@ -213,6 +242,9 @@ public class Network extends Observable{
 
     public void setText(boolean text) {
         Text = text;
+        super.setChanged();
+        super.notifyObservers();
+
     }
 
     public boolean isConnections() {
@@ -221,6 +253,8 @@ public class Network extends Observable{
 
     public void setConnections(boolean connections) {
         Connections = connections;
+        super.setChanged();
+        super.notifyObservers();
     }
 
     public boolean isActive() {
@@ -229,6 +263,8 @@ public class Network extends Observable{
 
     public void setActive(boolean active) {
         Active = active;
+        super.setChanged();
+        super.notifyObservers();
     }
 }
 

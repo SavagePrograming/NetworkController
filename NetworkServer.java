@@ -185,26 +185,31 @@ public class NetworkServer {
     public void dead(String arguments){
         String name = arguments.split(" ")[0];
         this.network.kill(name);
+        this.network.update();
     }
 
     public void immune(String arguments){
         String name = arguments.split(" ")[0];
         this.network.immune(name);
+        this.network.update();
     }
 
     public void infect(String arguments){
         String name = arguments.split(" ")[0];
         this.network.infect(name);
+        this.network.update();
     }
 
     public void resistance(String arguments){
         String name = arguments.split(" ")[0];
         this.network.resistance(name);
+        this.network.update();
     }
 
     public void suseptable(String arguments){
         String name = arguments.split(" ")[0];
         this.network.suseptable(name);
+        this.network.update();
     }
 
     /**

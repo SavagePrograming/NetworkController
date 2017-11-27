@@ -9,7 +9,7 @@ public class NetworkRunner extends Thread {
     }
     @Override
     public void run() {
-        while (this.net.On){
+        while (this.net.isOn()){
             try {
                 sleep(this.timeDelay);
             } catch (InterruptedException e) {

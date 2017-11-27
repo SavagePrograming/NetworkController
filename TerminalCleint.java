@@ -64,7 +64,7 @@ public class TerminalCleint{
     public void send(String input){
         if (validate(input)){
             networkOut.println(input);
-        }else if (input.contains(READ)){
+        }else if (input.split(" ")[0].equals(READ)){
             String path = "";
             boolean start = true;
             for (String i: input.split(" ")){
@@ -86,14 +86,15 @@ public class TerminalCleint{
     }
 
     boolean validate(String input){
-        return input.contains(Protocol.CHANGE ) || input.contains(Protocol.MOVE) || input.contains(Protocol.CLEAR) ||
-                input.contains(Protocol.INITIAL_CONNECT) || input.contains(Protocol.CONNECT) ||
-                input.contains(Protocol.ERROR ) || input.contains(Protocol.CREATE) || input.contains(Protocol.ZOOM) ||
-                input.contains(Protocol.EXIT) || input.contains(Protocol.DELETE) || input.contains(Protocol.STEP)||
-                input.contains(Protocol.START) || input.contains(Protocol.STOP) || input.contains(Protocol.ONOFF) ||
-                input.contains(Protocol.TEXT) || input.contains(Protocol.CONNECTIONS) ||
-                input.contains(Protocol.INFECTED) || input.contains(Protocol.DEAD) || input.contains(Protocol.IMMUNE) ||
-                input.contains(Protocol.SUSCEPTIBLE) || input.contains(Protocol.RESISTANCE);
+        String command = input.split(" ")[0];
+        return command.equals(Protocol.CHANGE ) || command.equals(Protocol.MOVE) || command.equals(Protocol.CLEAR) ||
+                command.equals(Protocol.INITIAL_CONNECT) || command.equals(Protocol.CONNECT) ||
+                command.equals(Protocol.ERROR ) || command.equals(Protocol.CREATE) || command.equals(Protocol.ZOOM) ||
+                command.equals(Protocol.EXIT) || command.equals(Protocol.DELETE) || command.equals(Protocol.STEP)||
+                command.equals(Protocol.START) || command.equals(Protocol.STOP) || command.equals(Protocol.ONOFF) ||
+                command.equals(Protocol.TEXT) || command.equals(Protocol.CONNECTIONS) ||
+                command.equals(Protocol.INFECTED) || command.equals(Protocol.DEAD) || command.equals(Protocol.IMMUNE) ||
+                command.equals(Protocol.SUSCEPTIBLE) || command.equals(Protocol.RESISTANCE);
 
 
     }

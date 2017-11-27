@@ -38,6 +38,8 @@ public interface Protocol {
 
     String CLEAR = "Clear";
 
+    String RANDOM = "Random";
+
     String ZOOM = "Zoom";
 
     String TEXT = "Text";

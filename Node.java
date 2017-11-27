@@ -60,7 +60,8 @@ public class Node{
                 this.state = State.Dead;
                 this.timeCounter = 0;
             }
-        }else if (this.future != null){
+        }
+        if (this.future != null){
             this.state = this.future;
             this.future = null;
         }
