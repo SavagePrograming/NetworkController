@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Terminal extends Application {
@@ -48,15 +49,13 @@ public class Terminal extends Application {
     public void start(Stage primaryStage) {
         try {
 //            System.out.println(model.);
-            if (getParamNamed("width") == "" || getParamNamed("height") == ""){
+            if (Objects.equals(getParamNamed("width"), "") || Objects.equals(getParamNamed("height"), "")){
                 terminalCleint = new TerminalCleint(getParamNamed("host"), Integer.parseInt(getParamNamed("port")));
 
             }else {
                 terminalCleint = new TerminalCleint(getParamNamed("host"), Integer.parseInt(getParamNamed("port")),
                         Integer.parseInt(getParamNamed("width")), Integer.parseInt(getParamNamed("height")));
             }
-
-
 
             System.out.println("start called.");
             System.out.println("start may process the command line.");
@@ -78,14 +77,20 @@ public class Terminal extends Application {
 
             pane.setCenter(textField);
             Scene scene = new Scene(pane);
+
 //
 //            primaryStage.setWidth(WIDTH);
 //            primaryStage.setHeight(HEIGHT);
 
 
             primaryStage.setScene(scene);
+            primaryStage.setWidth(400);
             primaryStage.setTitle("Controler");
             primaryStage.show();
+
+            if (!getParamNamed("read").equals("")){
+                terminalCleint.readFromFile(getParamNamed("read"));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

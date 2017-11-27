@@ -1,12 +1,32 @@
-Create a
-Create b
-Create c
-Create d
-Move a 100 100
-Move b 100 300
-Move c 300 300
-Move d 300 100
-Connect a b
-Connect b c
-Connect c d
-Connect d a
+Create 11
+Move 11 100 100
+Create 12
+Move 12 100 200
+Create 13
+Move 13 100 300
+Create 14
+Move 14 100 400
+Create 21
+Move 21 200 100
+Create 22
+Move 22 200 200
+Create 23
+Move 23 200 300
+Create 24
+Move 24 200 400
+Create 31
+Move 31 300 100
+Create 32
+Move 32 300 200
+Create 33
+Move 33 300 300
+Create 34
+Move 34 300 400
+Create 41
+Move 41 400 100
+Create 42
+Move 42 400 200
+Create 43
+Move 43 400 300
+Create 44
+Move 44 400 400

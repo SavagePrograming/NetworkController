@@ -7,8 +7,10 @@ public class Network extends Observable{
     private HashMap<String, Node> nodes;
     private int width;
     private int height;
-    boolean On;
-    boolean Active;
+    private boolean On;
+    private boolean Active;
+    private boolean Text = true;
+    private boolean Connections = true;
 
     public HashMap<String, Node> getNodes() {
         return nodes;
@@ -37,23 +39,73 @@ public class Network extends Observable{
     }
 
     public synchronized void infect(String name){
-        this.nodes.get(name).setState(State.Infected);
+        if (name.equals(Protocol.ALL)){
+            for (Node n:nodes.values()){
+                n.setState(State.Susceptible);
+            }
+        }else{
+            this.nodes.get(name).setState(State.Infected);
+        }
     }
 
     public synchronized void suseptable(String name){
-        this.nodes.get(name).setState(State.Susceptible);
+        if (name.equals(Protocol.ALL)){
+            for (Node n:nodes.values()){
+                n.setState(State.Susceptible);
+            }
+        }else{
+            this.nodes.get(name).setState(State.Susceptible);
+        }
     }
 
     public synchronized void resistance(String name){
-        this.nodes.get(name).setState(State.Resistant);
+        if (name.equals(Protocol.ALL)){
+            for (Node n:nodes.values()){
+                n.setState(State.Susceptible);
+            }
+        }else{
+            this.nodes.get(name).setState(State.Resistant);
+        }
     }
 
     public synchronized void immune(String name){
-        this.nodes.get(name).setState(State.Immune);
+        if (name.equals(Protocol.ALL)){
+            for (Node n:nodes.values()){
+                n.setState(State.Susceptible);
+            }
+        }else{
+            this.nodes.get(name).setState(State.Immune);
+        }
     }
 
     public synchronized void kill(String name){
-        this.nodes.get(name).setState(State.Dead);
+        if (name.equals(Protocol.ALL)){
+            for (Node n:nodes.values()){
+                n.setState(State.Susceptible);
+            }
+        }else{
+            this.nodes.get(name).setState(State.Dead);
+        }
+    }
+
+    public synchronized void connectAll(){
+        for (Node n:nodes.values()){
+            for (Node n2: nodes.values()){
+                if ( n!=n2){
+                    n.connect(n2.getName(), n2);
+                }
+            }
+        }
+        super.setChanged();
+        super.notifyObservers();
+    }
+
+    public synchronized void removeAllConnections(){
+        for (Node n:nodes.values()){
+            n.clearConnections();
+        }
+        super.setChanged();
+        super.notifyObservers();
     }
 
     public synchronized void connect(String name1, String name2){
@@ -67,10 +119,45 @@ public class Network extends Observable{
         super.setChanged();
         super.notifyObservers();
     }
+    public void clear(){
+        this.nodes = new HashMap<>();
+        super.setChanged();
+        super.notifyObservers();
+    }
 
     public void setDim(int width, int height) {
         this.width = width;
         this.height = height;
+
+    }
+
+    public void zoom(double scale) {
+        if (scale > 0) {
+
+            for (Node n: this.nodes.values()){
+                n.setXY((int)(n.getX() * scale), (int)(n.getY() * scale));
+            }
+            this.width = (int)(this.width * scale);
+            this.height = (int)(this.height * scale);
+        }else{
+            scale = Math.abs(scale);
+            for (Node n: this.nodes.values()){
+                n.setXY((int)(n.getX() / scale), (int)(n.getY() / scale));
+            }
+            this.width = (int)(this.width / scale);
+            this.height = (int)(this.height / scale);
+
+        }
+        super.setChanged();
+        super.notifyObservers();
+    }
+
+    public void update(){
+        for (Node n: this.nodes.values()){
+            n.updateState();
+        }
+        super.setChanged();
+        super.notifyObservers();
     }
 
     public synchronized void runOnce(){
@@ -118,6 +205,30 @@ public class Network extends Observable{
         this.Active = false;
         super.setChanged();
         super.notifyObservers();
+    }
+
+    public boolean isText() {
+        return Text;
+    }
+
+    public void setText(boolean text) {
+        Text = text;
+    }
+
+    public boolean isConnections() {
+        return Connections;
+    }
+
+    public void setConnections(boolean connections) {
+        Connections = connections;
+    }
+
+    public boolean isActive() {
+        return Active;
+    }
+
+    public void setActive(boolean active) {
+        Active = active;
     }
 }
 

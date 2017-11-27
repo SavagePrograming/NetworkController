@@ -21,7 +21,11 @@ public class Node{
         x = 100;
         y = 100;
     }
-    
+
+    public State getState() {
+        return state;
+    }
+
     public Node(String name, HashMap<String, Node> nodes){
         this.name = name;
         this.nodes = nodes;
@@ -56,9 +60,14 @@ public class Node{
                 this.state = State.Dead;
                 this.timeCounter = 0;
             }
-        }else{
+        }else if (this.future != null){
             this.state = this.future;
+            this.future = null;
         }
+    }
+
+    public void clearConnections(){
+        this.nodes = new HashMap<>();
     }
 
     
@@ -84,6 +93,10 @@ public class Node{
 
     public HashMap<String, Node> getNodes() {
         return nodes;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

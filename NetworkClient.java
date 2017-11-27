@@ -148,6 +148,7 @@ public class NetworkClient {
 
     public void change(State s, String name ){
         switch(s) {
+
             case Susceptible:
                 this.networkOut.println(Protocol.CHANGE + " " + Protocol.SUSCEPTIBLE + " " + name);
                 break;

@@ -86,10 +86,14 @@ public class TerminalCleint{
     }
 
     boolean validate(String input){
-        return input.contains(Protocol.CHANGE ) || input.contains(Protocol.MOVE) ||
+        return input.contains(Protocol.CHANGE ) || input.contains(Protocol.MOVE) || input.contains(Protocol.CLEAR) ||
                 input.contains(Protocol.INITIAL_CONNECT) || input.contains(Protocol.CONNECT) ||
-                input.contains(Protocol.ERROR ) || input.contains(Protocol.CREATE) ||
-                input.contains(Protocol.EXIT) || input.contains(Protocol.DELETE) ;
+                input.contains(Protocol.ERROR ) || input.contains(Protocol.CREATE) || input.contains(Protocol.ZOOM) ||
+                input.contains(Protocol.EXIT) || input.contains(Protocol.DELETE) || input.contains(Protocol.STEP)||
+                input.contains(Protocol.START) || input.contains(Protocol.STOP) || input.contains(Protocol.ONOFF) ||
+                input.contains(Protocol.TEXT) || input.contains(Protocol.CONNECTIONS) ||
+                input.contains(Protocol.INFECTED) || input.contains(Protocol.DEAD) || input.contains(Protocol.IMMUNE) ||
+                input.contains(Protocol.SUSCEPTIBLE) || input.contains(Protocol.RESISTANCE);
 
 
     }

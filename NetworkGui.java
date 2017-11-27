@@ -4,6 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import java.util.Map;
@@ -11,7 +12,13 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class NetworkGui extends Application implements Observer {
-    int SIZE = 50;
+    int SIZE = 20;
+
+    final Paint INFECTED_COLOR = Color.GREEN;
+    final Paint RESISTANT_COLOR = Color.BLUE;
+    final Paint SUSEPTABLE_COLOR = Color.RED;
+    final Paint IMMUNE_COLOR = Color.PURPLE;
+    final Paint DEAD_COLOR = Color.BLACK;
     /**
      * Connection to network interface to server
      */
@@ -39,7 +46,7 @@ public class NetworkGui extends Application implements Observer {
             params = super.getParameters().getNamed();
         }
         if ( !params.containsKey( name ) ) {
-            System.out.println("Nope");
+//            System.out.println("Nope");
             return "";
         }
         else {
@@ -88,25 +95,61 @@ public class NetworkGui extends Application implements Observer {
     }
 
 
+    public void setFillColor(State state, GraphicsContext gc){
+        switch (state){
+            case Susceptible:
+                gc.setFill(SUSEPTABLE_COLOR);
+                break;
+            case Infected:
+                gc.setFill(INFECTED_COLOR);
+                break;
+            case Dead:
+                gc.setFill(DEAD_COLOR);
+                break;
+            case Immune:
+                gc.setFill(IMMUNE_COLOR);
+                break;
+            case Resistant:
+                gc.setFill(RESISTANT_COLOR);
+                break;
+        }
+    }
 
     @Override
     public void update(Observable o, Object arg) {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
         if (o instanceof  Network){
-            gc.setFill(Color.RED);
+
+            this.canvas.setHeight(((Network) o).getHeight());
+            this.canvas.setWidth(((Network) o).getWidth());
+
+            GraphicsContext gc = canvas.getGraphicsContext2D();
+            gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
+
+
             for (Node n: ((Network) o).getNodes().values()){
-                System.out.println(n);
-                System.out.println((n.getX() - SIZE / 2) + "  " +( n.getY() - SIZE / 2 )+ "  " +  SIZE + "  " +  SIZE);
+//                System.out.println(n);
+//                System.out.println((n.getX() - SIZE / 2) + "  " +( n.getY() - SIZE / 2 )+ "  " +  SIZE + "  " +  SIZE);
+                setFillColor(n.getState(), gc);
                 gc.fillOval(n.getX() - SIZE / 2, n.getY() - SIZE / 2, SIZE, SIZE);
             }
+            if (((Network) o).isConnections()) {
+                gc.setFill(Color.HONEYDEW);
+                for (Node n : ((Network) o).getNodes().values()) {
+                    for (Node n2 : n.getNodes().values()) {
+                        gc.strokeLine(n.getX(), n.getY(), n2.getX(), n2.getY());
+                        gc.fillOval(n2.getX() - SIZE / 10 / 2, n2.getY() - SIZE / 10 / 2, SIZE / 10, SIZE / 10);
+                    }
 
-            gc.setFill(Color.BLUE);
-            for (Node n: ((Network) o).getNodes().values()){
-                for (Node n2: n.getNodes().values()){
-                    gc.strokeLine(n.getX(), n.getY(), n2.getX(), n2.getY());
                 }
-                gc.fillOval(n.getX()  - SIZE/10 / 2, n.getY() - SIZE/10 / 2, SIZE/10, SIZE/10);
+            }
+
+            if (((Network) o).isText()) {
+                gc.setFill(Color.BLUE);
+                for (Node n : ((Network) o).getNodes().values()) {
+//                System.out.println(n);
+//                System.out.println((n.getX() - SIZE / 2) + "  " +( n.getY() - SIZE / 2 )+ "  " +  SIZE + "  " +  SIZE);
+                    gc.fillText(n.getName(), n.getX() - SIZE / 2, n.getY() - SIZE / 2 + SIZE / 4);
+                }
             }
         }
 

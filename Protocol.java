@@ -22,6 +22,8 @@ public interface Protocol {
 
     String DEAD = "Dead";
 
+    String NONE = "None";
+
     String IMMUNE = "Immune";
 
     String RESISTANCE = "Resistance";
@@ -33,5 +35,15 @@ public interface Protocol {
     String STEP = "Step";
 
     String ONOFF = "Onoff";
+
+    String CLEAR = "Clear";
+
+    String ZOOM = "Zoom";
+
+    String TEXT = "Text";
+
+    String ALL = "All";
+
+    String CONNECTIONS = "Connections";
 
 }

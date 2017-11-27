@@ -129,8 +129,18 @@ public class NetworkServer {
     public void connect(String arguments ){
         String fields[] = arguments.trim().split( " " );
         String name1 =  fields[ 0 ];
-        String name2 =  fields[ 1 ];
-        this.network.connect(name1, name2);
+        if (name1.equals(Protocol.ALL)){
+            this.network.connectAll();
+        }else if (name1.equals(Protocol.NONE)){
+            this.network.removeAllConnections();
+        }else {
+            String name2 = fields[1];
+            this.network.connect(name1, name2);
+        }
+    }
+
+    public void clear(){
+        this.network.clear();
     }
 
     public void create(String arguments ){
@@ -150,6 +160,7 @@ public class NetworkServer {
         String[] args = arguments.split(" ");
         String request = args[0];
         String name = args[1];
+        System.out.println(request);
         switch (request) {
             case Protocol.DEAD:
                 this.network.kill(name);
@@ -158,6 +169,7 @@ public class NetworkServer {
                 this.network.immune(name);
                 break;
             case Protocol.INFECTED:
+                System.out.println("Infecting " + name);
                 this.network.infect(name);
                 break;
             case Protocol.RESISTANCE:
@@ -167,8 +179,33 @@ public class NetworkServer {
                 this.network.suseptable(name);
                 break;
         }
+        this.network.update();
     }
 
+    public void dead(String arguments){
+        String name = arguments.split(" ")[0];
+        this.network.kill(name);
+    }
+
+    public void immune(String arguments){
+        String name = arguments.split(" ")[0];
+        this.network.immune(name);
+    }
+
+    public void infect(String arguments){
+        String name = arguments.split(" ")[0];
+        this.network.infect(name);
+    }
+
+    public void resistance(String arguments){
+        String name = arguments.split(" ")[0];
+        this.network.resistance(name);
+    }
+
+    public void suseptable(String arguments){
+        String name = arguments.split(" ")[0];
+        this.network.suseptable(name);
+    }
 
     /**
      * Called when the server sends a message saying that
@@ -181,6 +218,17 @@ public class NetworkServer {
         dPrint( "Fatal error: " + arguments );
         this.network.error();
         this.stop();
+    }
+
+    public void zoom( String arguments ) {
+        this.network.zoom(Double.parseDouble(arguments.split(" ")[0]));
+    }
+
+    public void connectionsOnOff( ) {
+        this.network.setConnections(!this.network.isConnections());
+    }
+    public void textOnOff() {
+        this.network.setText(!this.network.isText());
     }
 
     /**
@@ -260,11 +308,38 @@ public class NetworkServer {
                     case Protocol.STEP:
                         step();
                         break;
+                    case Protocol.TEXT:
+                        textOnOff();
+                        break;
+                    case Protocol.CONNECTIONS:
+                        connectionsOnOff();
+                        break;
                     case Protocol.START:
                         start(arguments);
                         break;
                     case Protocol.STOP:
                         pause();
+                        break;
+                    case Protocol.DEAD:
+                        this.dead(arguments);
+                        break;
+                    case Protocol.IMMUNE:
+                        this.immune(arguments);
+                        break;
+                    case Protocol.INFECTED:
+                        this.infect(arguments);
+                        break;
+                    case Protocol.RESISTANCE:
+                        this.resistance(arguments);
+                        break;
+                    case Protocol.SUSCEPTIBLE:
+                        this.suseptable(arguments);
+                        break;
+                    case Protocol.CLEAR:
+                        clear();
+                        break;
+                    case Protocol.ZOOM:
+                        zoom(arguments);
                         break;
                     case Protocol.ONOFF:
                         if (this.network.isOn()){
