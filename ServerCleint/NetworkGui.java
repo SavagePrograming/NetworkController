@@ -8,7 +8,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-
+import Network.Network;
+import Network.State;
+import Network.Node;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -118,15 +120,11 @@ public class NetworkGui extends Application implements Observer {
     }
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg){
 
-        if (o instanceof  Network){
+        if (o instanceof Network){
+            System.out.println(((Network) o).isActive());
             if (!((Network) o).isActive()){
-                try {
-                    this.stop();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
             this.canvas.setHeight(((Network) o).getHeight());
             this.canvas.setWidth(((Network) o).getWidth());
@@ -164,4 +162,8 @@ public class NetworkGui extends Application implements Observer {
 
     }
 
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+    }
 }

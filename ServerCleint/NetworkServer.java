@@ -7,6 +7,9 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import Network.Network;
+import Network.State;
+import Network.Protocol;
 
 
 /**

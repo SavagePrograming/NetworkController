@@ -1,10 +1,6 @@
-package JustCleint;
+package Network;
 
 import java.util.HashMap;
-
-enum State{
-    Susceptible, Infected, Dead, Immune, Resistant
-}
 
 public class Node{
     private HashMap<String, Node> nodes;
@@ -54,11 +50,15 @@ public class Node{
         }
     }
 
-    public void updateState(){
+    public void updateState(boolean Death){
         if (this.state == State.Infected) {
             this.timeCounter--;
             if (this.timeCounter <= 0) {
-                this.state = State.Dead;
+                if (Death){
+                    this.state = State.Dead;
+                }else{
+                    this.state = State.Susceptible;
+                }
                 this.timeCounter = 0;
             }
         }

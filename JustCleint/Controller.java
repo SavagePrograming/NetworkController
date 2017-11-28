@@ -1,9 +1,13 @@
 package JustCleint;
 
+import Network.Network;
+import Network.Protocol;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 
@@ -24,7 +28,6 @@ public class Controller {
      */
     private Network network;
 
-    private TerminalGui TG;
 
     private boolean go;
 
@@ -47,12 +50,9 @@ public class Controller {
      * @param model    the local object holding the state of the network that
      *                 must be updated upon receiving server message
      */
-    public Controller(int width, int height, Network model){
+    public Controller(int width, int height, Network model, Map<String, String> params){
         this.network = model;
         this.initialConnect(width, height);
-        this.TG = new TerminalGui();
-        this.TG.setController(this);
-        this.TG.start();
     }
 
     public void initialConnect(int width, int height){
@@ -71,9 +71,9 @@ public class Controller {
     public void connect(String arguments ){
         String fields[] = arguments.trim().split( " " );
         String name1 =  fields[ 0 ];
-        if (name1.equals(Protocol2.ALL)){
+        if (name1.equals(Protocol.ALL)){
             this.network.connectAll();
-        }else if (name1.equals(Protocol2.NONE)){
+        }else if (name1.equals(Protocol.NONE)){
             this.network.removeAllConnections();
         }else {
             String name2 = fields[1];
@@ -86,7 +86,7 @@ public class Controller {
     }
 
     public void create(String arguments ){
-        System.out.println(":{");
+//        System.out.println(":{");
         String fields[] = arguments.trim().split( " " );
         String name1 =  fields[ 0 ];
         this.network.create(name1);
@@ -104,20 +104,20 @@ public class Controller {
         String name = args[1];
         System.out.println(request);
         switch (request) {
-            case Protocol2.DEAD:
+            case Protocol.DEAD:
                 this.network.kill(name);
                 break;
-            case Protocol2.IMMUNE:
+            case Protocol.IMMUNE:
                 this.network.immune(name);
                 break;
-            case Protocol2.INFECTED:
+            case Protocol.INFECTED:
                 System.out.println("Infecting " + name);
                 this.network.infect(name);
                 break;
-            case Protocol2.RESISTANCE:
+            case Protocol.RESISTANCE:
                 this.network.resistance(name);
                 break;
-            case Protocol2.SUSCEPTIBLE:
+            case Protocol.SUSCEPTIBLE:
                 this.network.suseptable(name);
                 break;
         }
@@ -204,20 +204,23 @@ public class Controller {
 
     boolean validate(String input){
         String command = input.split(" ")[0];
-        return command.equals(Protocol2.CHANGE ) || command.equals(Protocol2.MOVE) || command.equals(Protocol2.CLEAR) ||
-                command.equals(Protocol2.INITIAL_CONNECT) || command.equals(Protocol2.CONNECT) ||
-                command.equals(Protocol2.ERROR ) || command.equals(Protocol2.CREATE) || command.equals(Protocol2.ZOOM) ||
-                command.equals(Protocol2.EXIT) || command.equals(Protocol2.DELETE) || command.equals(Protocol2.STEP)||
-                command.equals(Protocol2.START) || command.equals(Protocol2.STOP) || command.equals(Protocol2.ONOFF) ||
-                command.equals(Protocol2.TEXT) || command.equals(Protocol2.CONNECTIONS) ||
-                command.equals(Protocol2.INFECTED) || command.equals(Protocol2.DEAD) || command.equals(Protocol2.IMMUNE) ||
-                command.equals(Protocol2.SUSCEPTIBLE) || command.equals(Protocol2.RESISTANCE);
+        return command.equals(Protocol.CHANGE ) || command.equals(Protocol.MOVE) || command.equals(Protocol.CLEAR) ||
+                command.equals(Protocol.INITIAL_CONNECT) || command.equals(Protocol.CONNECT) ||
+                command.equals(Protocol.ERROR ) || command.equals(Protocol.CREATE) || command.equals(Protocol.ZOOM) ||
+                command.equals(Protocol.EXIT) || command.equals(Protocol.DELETE) || command.equals(Protocol.STEP)||
+                command.equals(Protocol.START) || command.equals(Protocol.STOP) || command.equals(Protocol.ONOFF) ||
+                command.equals(Protocol.TEXT) || command.equals(Protocol.CONNECTIONS) ||
+                command.equals(Protocol.INFECTED) || command.equals(Protocol.DEAD) || command.equals(Protocol.IMMUNE) ||
+                command.equals(Protocol.SUSCEPTIBLE) || command.equals(Protocol.RESISTANCE);
     }
 
-    public void command(String input){
+    public boolean command(String input){
+
         if (validate(input)){
+//            System.out.println("1:" + input);
             runCommand(input);
-        }else if (input.split(" ")[0].equals(Protocol2.READ)){
+            return true;
+        }else if (input.split(" ")[0].equals(Protocol.READ)){
             String path = "";
             boolean start = true;
             for (String i: input.split(" ")){
@@ -229,8 +232,10 @@ public class Controller {
 
             }
             readFromFile(path.substring(0,path.length() - 1));
+            return true;
         }else{
             System.out.println("Invalid Command:'" + input + "'");
+            return false;
         }
     }
 
@@ -240,7 +245,7 @@ public class Controller {
             ArrayList<String> commands = new ArrayList<>();
             String line;
             while ((line = in.readLine()) != null){
-                if (!(line.contains(Protocol2.READ) && line.contains(fileName))) commands.add(line);
+                if (!(line.contains(Protocol.READ) && line.contains(fileName))) commands.add(line);
             }
             for (String command:commands){
                 this.command(command);
@@ -257,82 +262,89 @@ public class Controller {
      * outside will call it or try to start a thread on it.
      */
     private void runCommand(String command) {
+
+//        System.out.println("2:" + command);
         try {
             String[] args = command.split(" ");
             String request = args[0];
             String arguments = "";
-            for (int i = 1; i < args.length; i ++){
-                arguments += args[i] + " ";
+            if (args.length > 1) {
+//                System.out.println("3:" + request);
+                for (int i = 1; i < args.length; i++) {
+                    arguments += args[i] + " ";
+                }
+                arguments = arguments.substring(0, arguments.length() - 1);
             }
-            arguments = arguments.substring(0, arguments.length() - 1);
 
-            System.out.println(request);
+//            System.out.println("4:"+request);
+//            System.out.println("5:"+request.equals(Protocol.TEXT));
 
             switch ( request ) {
-                case Protocol2.INITIAL_CONNECT:
+                case Protocol.INITIAL_CONNECT:
                     // This should not happen because Controller
                     // waits for the CONNECT message in the constructor.
                     assert false : "CONNECT already happened?";
                     initialConnect( arguments );
                     break;
-                case Protocol2.CONNECT:
+                case Protocol.CONNECT:
                     connect(arguments);
                     break;
-                case Protocol2.CREATE:
+                case Protocol.CREATE:
                     create(arguments);
                     break;
-                case Protocol2.DELETE:
+                case Protocol.DELETE:
                     delete(arguments);
                     break;
-                case Protocol2.ERROR:
+                case Protocol.ERROR:
                     error( arguments );
                     break;
-                case Protocol2.MOVE:
+                case Protocol.MOVE:
                     move(arguments);
                     break;
-                case Protocol2.EXIT:
+                case Protocol.EXIT:
                     close();
                     break;
-                case Protocol2.CHANGE:
+                case Protocol.CHANGE:
                     change(arguments);
                     break;
-                case Protocol2.STEP:
+                case Protocol.STEP:
                     step();
                     break;
-                case Protocol2.TEXT:
+                case Protocol.TEXT:
+                    System.out.println("TEXT");
                     textOnOff();
                     break;
-                case Protocol2.CONNECTIONS:
+                case Protocol.CONNECTIONS:
                     connectionsOnOff();
                     break;
-                case Protocol2.START:
+                case Protocol.START:
                     start(arguments);
                     break;
-                case Protocol2.STOP:
+                case Protocol.STOP:
                     pause();
                     break;
-                case Protocol2.DEAD:
+                case Protocol.DEAD:
                     this.dead(arguments);
                     break;
-                case Protocol2.IMMUNE:
+                case Protocol.IMMUNE:
                     this.immune(arguments);
                     break;
-                case Protocol2.INFECTED:
+                case Protocol.INFECTED:
                     this.infect(arguments);
                     break;
-                case Protocol2.RESISTANCE:
+                case Protocol.RESISTANCE:
                     this.resistance(arguments);
                     break;
-                case Protocol2.SUSCEPTIBLE:
+                case Protocol.SUSCEPTIBLE:
                     this.suseptable(arguments);
                     break;
-                case Protocol2.CLEAR:
+                case Protocol.CLEAR:
                     clear();
                     break;
-                case Protocol2.ZOOM:
+                case Protocol.ZOOM:
                     zoom(arguments);
                     break;
-                case Protocol2.ONOFF:
+                case Protocol.ONOFF:
                     if (this.network.isOn()){
                         pause();
                     }else {
@@ -353,6 +365,7 @@ public class Controller {
             this.stop();
         }
         catch( Exception e ) {
+            e.printStackTrace();
             this.error( e.getMessage() + '?' );
             this.stop();
         }

@@ -1,4 +1,4 @@
-package JustCleint;
+package Network;
 
 import java.util.HashMap;
 import java.util.Observable;
@@ -8,6 +8,7 @@ public class Network extends Observable{
     private HashMap<String, Node> nodes;
     private int width;
     private int height;
+    private boolean death = true;
     private boolean On;
     private boolean Active;
     private boolean Text = true;
@@ -44,12 +45,12 @@ public class Network extends Observable{
     }
 
     public synchronized void infect(String name){
-        if (name.equals(Protocol2.ALL)){
+        if (name.equals(Protocol.ALL)){
             for (Node n:nodes.values()){
                 n.setState(State.Infected);
                 n.setTimeCounter(((int) (Math.random() * (maxTime - minTime))) + minTime);
             }
-        }else if(name.equals(Protocol2.RANDOM)){
+        }else if(name.equals(Protocol.RANDOM)){
             Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
             n.setState(State.Infected);
             n.setTimeCounter(((int) (Math.random() * (maxTime - minTime))) + minTime);
@@ -61,12 +62,12 @@ public class Network extends Observable{
     }
 
     public synchronized void suseptable(String name){
-        if (name.equals(Protocol2.ALL)){
+        if (name.equals(Protocol.ALL)){
 
             for (Node n:nodes.values()){
                 n.setState(State.Susceptible);
             }
-        }else if(name.equals(Protocol2.RANDOM)){
+        }else if(name.equals(Protocol.RANDOM)){
             Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
             n.setState(State.Susceptible);
 
@@ -76,11 +77,11 @@ public class Network extends Observable{
     }
 
     public synchronized void resistance(String name){
-        if (name.equals(Protocol2.ALL)){
+        if (name.equals(Protocol.ALL)){
             for (Node n:nodes.values()){
                 n.setState(State.Resistant);
             }
-        }else if(name.equals(Protocol2.RANDOM)){
+        }else if(name.equals(Protocol.RANDOM)){
             Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
             n.setState(State.Resistant);
 
@@ -90,11 +91,11 @@ public class Network extends Observable{
     }
 
     public synchronized void immune(String name){
-        if (name.equals(Protocol2.ALL)){
+        if (name.equals(Protocol.ALL)){
             for (Node n:nodes.values()){
                 n.setState(State.Immune);
             }
-        }else if(name.equals(Protocol2.RANDOM)){
+        }else if(name.equals(Protocol.RANDOM)){
             Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
             n.setState(State.Immune);
 
@@ -104,11 +105,11 @@ public class Network extends Observable{
     }
 
     public synchronized void kill(String name){
-        if (name.equals(Protocol2.ALL)){
+        if (name.equals(Protocol.ALL)){
             for (Node n:nodes.values()){
                 n.setState(State.Dead);
             }
-        }else if(name.equals(Protocol2.RANDOM)){
+        }else if(name.equals(Protocol.RANDOM)){
             Node n = nodes.values().toArray(new Node[0])[(int)(Math.random() * nodes.values().size())];
             n.setState(State.Dead);
 
@@ -184,7 +185,7 @@ public class Network extends Observable{
 
     public void update(){
         for (Node n: this.nodes.values()){
-            n.updateState();
+            n.updateState(this.death);
         }
         super.setChanged();
         super.notifyObservers();
@@ -195,7 +196,7 @@ public class Network extends Observable{
             n.spreadInfection(.5, maxTime, minTime);
         }
         for (Node n: this.nodes.values()){
-            n.updateState();
+            n.updateState(this.death);
         }
         super.setChanged();
         super.notifyObservers();
@@ -267,5 +268,7 @@ public class Network extends Observable{
         super.setChanged();
         super.notifyObservers();
     }
+
+
 }
 

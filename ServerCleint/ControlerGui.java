@@ -12,6 +12,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+
+import Network.Network;
+import Network.State;
 import java.util.Map;
 
 public class ControlerGui extends Application {

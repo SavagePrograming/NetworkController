@@ -6,6 +6,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import Network.Network;
+import Network.State;
+import Network.Protocol;
+
 
 /**
  * The client side network interface to a Reversi network server.
@@ -19,6 +23,7 @@ import java.util.Scanner;
  * @author James Heliotis @ RIT CS
  */
 public class NetworkClient {
+
 
     final int HEIGHT = 200;
     final int WIDTH = 200;

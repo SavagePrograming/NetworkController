@@ -1,14 +1,25 @@
 package JustCleint;
 
+import Network.Network;
+import Network.Protocol;
+import Network.State;
+import Network.Node;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -16,7 +27,10 @@ import java.util.Observer;
 public class ScreenGui extends Application implements Observer {
     final int SIZE = 20;
     final int WIDTH = 500;
-    final int HEIGHT = 00;
+    final int HEIGHT = 500;
+    final int MEMORYLIMIT = -1;
+
+//    private Stage main;
     final Paint INFECTED_COLOR = Color.GREEN;
     final Paint RESISTANT_COLOR = Color.BLUE;
     final Paint SUSEPTABLE_COLOR = Color.RED;
@@ -38,6 +52,9 @@ public class ScreenGui extends Application implements Observer {
     private int width;
     private int height;
 
+    private ArrayList<String> history;
+    int historyIndex;
+
 
     /**
      * Look up a named command line parameter (format "--name=value")
@@ -57,6 +74,8 @@ public class ScreenGui extends Application implements Observer {
         }
     }
 
+
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -64,8 +83,17 @@ public class ScreenGui extends Application implements Observer {
     @Override
     public void start(Stage primaryStage) {
         try{
+            params = super.getParameters().getNamed();
             Network model = new Network();
-            controller = new Controller(500,500, model);
+            model.addObserver(this);
+            if (getParamNamed("width") != "" && getParamNamed("height") != "" ){
+                controller = new Controller(Integer.parseInt(getParamNamed("width")),
+                        Integer.parseInt(getParamNamed("height")), model, params);
+            }else{
+                controller = new Controller(WIDTH,HEIGHT, model, params);
+            }
+
+
             height =  model.getHeight();
             width = model.getWidth();
 //            System.out.println(model.);
@@ -87,7 +115,10 @@ public class ScreenGui extends Application implements Observer {
             primaryStage.setTitle( "Network Viewer" );
             primaryStage.show();
 
-            model.addObserver(this);
+            Stage secondStage = new Stage();
+            this.createSecondStage(secondStage);
+            secondStage.show();
+
 
         }catch (Exception e){
             e.printStackTrace();
@@ -118,8 +149,109 @@ public class ScreenGui extends Application implements Observer {
         }
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
+    public void createSecondStage(Stage primaryStage) {
+
+        try {
+            history = new ArrayList<>();
+            historyIndex = 0;
+            BorderPane pane = new BorderPane();
+
+            TextField textField = new TextField();
+            textField.setOnAction(
+                    new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent e) {
+                            if(controller.command(textField.getText())){
+                                addToHistory(textField.getText());
+                            }
+                            textField.setText("");
+                            historyIndex = -1;
+                        }
+                    });
+
+            textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+                    if (event.getCode().equals(KeyCode.UP)){
+
+                        historyIndex ++;
+                        textField.setText(getHistory());
+
+
+                    }else if (event.getCode().equals(KeyCode.DOWN)){
+
+                        historyIndex --;
+                        textField.setText(getHistory());
+
+
+                    }
+//                    else if (event.getCode().equals(KeyCode.S)){
+//                        System.out.println("Clicked");
+//                        if (textField.getText().equals("")){
+//
+//                            System.out.println("Set");
+//                            textField.setText("usceptible");
+//                        }
+//                    }
+                }
+            });
+            pane.setCenter(textField);
+            Scene scene = new Scene(pane);
+
+//
+//            primaryStage.setWidth(WIDTH);
+//            primaryStage.setHeight(HEIGHT);
+
+
+            primaryStage.setScene(scene);
+            primaryStage.setWidth(400);
+            primaryStage.setTitle("Controler");
+            primaryStage.show();
+
+            if (!getParamNamed("read").equals("")){
+                controller.readFromFile(getParamNamed("read"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            controller.error(e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+    public String getHistory(){
+        if (historyIndex < 0) {
+            historyIndex = -1;
+            return "";
+        }else if (historyIndex >= history.size()){
+            historyIndex = history.size() - 1;
+            if (historyIndex >= 0) return history.get(historyIndex);
+            else  return "";
+
+        }else if (MEMORYLIMIT >= 0 && historyIndex >= MEMORYLIMIT) {
+            historyIndex = MEMORYLIMIT - 1;
+            if (historyIndex >= 0) return history.get(historyIndex);
+            else return "";
+        }else{
+            return  history.get(historyIndex);
+        }
+    }
+
+
+    public void addToHistory(String command){
+        if (history.contains(command)){
+            history.remove(command);
+            history.add(0, command);
+        }else{
+            history.add(0, command);
+        }
+        while (MEMORYLIMIT >= 0 && MEMORYLIMIT < history.size()){
+            history.remove(MEMORYLIMIT);
+        }
+    }
+
+    public void updateWhenReady(Observable o, Object arg){
+//        System.out.println("Updated");
 
         if (o instanceof  Network){
             if (!((Network) o).isActive()){
@@ -163,6 +295,16 @@ public class ScreenGui extends Application implements Observer {
             }
         }
 
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                updateWhenReady(o,arg);
+            }
+        });
     }
 
 }
