@@ -36,6 +36,7 @@ public class Controller {
      */
     private synchronized void stop() {
         this.go = false;
+        this.network.stopForce();
     }
 
     /**

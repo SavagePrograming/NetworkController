@@ -142,48 +142,48 @@ public class Node{
         for (Node n:nodes){
             if (!n.equals(this)) {
                 if (!(Math.abs(n.x - this.x) == 0)){
-                    this.fx += push / Math.pow((n.x - this.x), 2) * (n.x - this.x)/ Math.abs((n.x - this.x)); // / nodes.size()
+                    this.fx -= (push / ((Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2))) * ((n.x - this.x)/ Math.sqrt(Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2)))); // / nodes.size()
                 }
                 if (!(Math.abs(n.y - this.y) == 0)){
-                    this.fy += push / Math.pow((n.y - this.y), 2) * ( (n.y - this.y)/ Math.abs((n.y - this.y)))  ;// nodes.size();
+                    this.fy -= (push / ( (Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2))) * ( (n.y - this.y) / Math.sqrt(Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2))));// nodes.size();
                 }
-                if (!(Math.abs(n.x - this.x) == 0)) {
-                    System.out.print("Push (X: " + this.x + " " + n.x + " " + -push / Math.pow((n.x - this.x), 2) * (n.x - this.x) / Math.abs((n.x - this.x)));
-                }else{
-                    System.out.print("Push (X: Zeroed");
-                }
-                if (!(Math.abs(n.y - this.y) == 0)) {
-                    System.out.println( " , Y: "+ this.y + " " + n.y + " " + -push / Math.pow((n.y - this.y), 2) * ( (n.y - this.y)/ Math.abs((n.y - this.y))) + ")");
-                }else{
-                    System.out.println(" , Y: Zeroed)");
-                }
+//                if (!(Math.abs(n.x - this.x) == 0)) {
+//                    System.out.print("Push (X: " + this.x + " " + n.x + " " + (-push / ((Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2))) * ((n.x - this.x)/ Math.sqrt(Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2)))));
+//                }else{
+//                    System.out.print("Push (X: Zeroed");
+//                }
+//                if (!(Math.abs(n.y - this.y) == 0)) {
+//                    System.out.println( " , Y: "+ this.y + " " + n.y + " " + (-push / ( (Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2))) * ( (n.y - this.y) / Math.sqrt(Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2)))) + ")");
+//                }else{
+//                    System.out.println(" , Y: Zeroed)");
+//                }
 //                System.out.println("Push " + this.fx + " " + this.fx);
             }
         }
         for (Node n:this.nodes.values()){
             if (n != this) {
                 if (!(Math.abs(n.x - this.x) == 0)){
-                    this.fx += pull * Math.pow((n.x - this.x), 2) * ((n.x - this.x) / Math.abs(n.x - this.x));// this.nodes.size();
+                    this.fx += pull * (Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2)) * ((n.x - this.x) / Math.sqrt((Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2))));// this.nodes.size();
                 }
                 if (!(Math.abs(n.y - this.y) == 0)){
-                    this.fy += pull * Math.pow((n.y - this.y), 2) * ((n.y - this.y) / Math.abs(n.y - this.y)) ;// this.nodes.size();
+                    this.fy += pull * (Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2)) * ( (n.y - this.y) / Math.sqrt((Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2)))) ;// this.nodes.size();
                 }
-                if (!(Math.abs(n.x - this.x) == 0)) {
-                    System.out.print("Pull (X: " + this.x + " " + n.x + " " + pull * Math.pow((n.x - this.x), 2) * ((n.x - this.x) / Math.abs(n.x - this.x)));
-                }else{
-                    System.out.print("Pull (X: Zeroed");
-                }
-                if (!(Math.abs(n.y - this.y) == 0)) {
-                    System.out.println( " , Y: "+ this.y + " " + n.y + " " + pull * Math.pow((n.y - this.y), 2) * ((n.y - this.y) / Math.abs(n.y - this.y))+ ")");
-                }else{
-                    System.out.println( " , Y: Zeroed)");
-                }
+//                if (!(Math.abs(n.x - this.x) == 0)) {
+//                    System.out.print("Pull (X: " + this.x + " " + n.x + " " + pull * (Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2)) * ((n.x - this.x) / Math.sqrt((Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2)))));
+//                }else{
+//                    System.out.print("Pull (X: Zeroed");
+//                }
+//                if (!(Math.abs(n.y - this.y) == 0)) {
+//                    System.out.println( " , Y: "+ this.y + " " + n.y + " " + pull * (Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2)) * ( (n.y - this.y) / Math.sqrt((Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2))))+ ")");
+//                }else{
+//                    System.out.println( " , Y: Zeroed)");
+//                }
             }
         }
     }
     public void scaledUpdateLocation(int xMax, int yMax, int delta,  int wiggle){
-        System.out.println((int) (delta * this.fx / (double)xMax));
-        System.out.println(delta * this.fy / (double)yMax);
+//        System.out.println((int) (delta * this.fx / (double)xMax) + " " + (int) (delta * this.fx / (double)xMax + Math.random() * 2 * wiggle - wiggle));
+//        System.out.println((int) (delta * this.fy / (double)yMax) + " " + (int) (delta * this.fx / (double)xMax + Math.random() * 2 * wiggle - wiggle));
         this.x += (int) (delta * this.fx / (double)xMax + Math.random() * 2 * wiggle - wiggle);
         this.y += (int) (delta * this.fy / (double)yMax + Math.random() * 2 * wiggle - wiggle);
     }
