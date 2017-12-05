@@ -1,10 +1,12 @@
-package JustCleint;
+package Network;
 
-public interface Protocol2 {
+public interface Protocol {
 
     String INITIAL_CONNECT = "Initial_Connect";
 
     String CREATE = "Create";
+
+    String DEATH = "Death";
 
     String CONNECT = "Connect";
 
@@ -51,5 +53,11 @@ public interface Protocol2 {
     String ALL = "All";
 
     String CONNECTIONS = "Connections";
+
+    String FORCE = "Force";
+
+    String FORCESTOP = "Stopforce";
+
+    String FORCESTART = "Startforce";
 
 }

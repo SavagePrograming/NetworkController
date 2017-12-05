@@ -8,6 +8,7 @@ public class Network extends Observable{
     private HashMap<String, Node> nodes;
     private int width;
     private int height;
+
     private boolean death = true;
     private boolean On;
     private boolean Active;
@@ -15,8 +16,10 @@ public class Network extends Observable{
     private boolean Connections = true;
     public final int minTime = 5;
     public final int maxTime = 10;
+    public final int margin = 20;
 
     public final double probability = .5;
+    private boolean Force;
 
     public HashMap<String, Node> getNodes() {
         return nodes;
@@ -59,6 +62,15 @@ public class Network extends Observable{
             this.nodes.get(name).setState(State.Infected);
             this.nodes.get(name).setTimeCounter(((int) (Math.random() * (maxTime - minTime))) + minTime);
         }
+    }
+
+
+    public boolean isDeath() {
+        return death;
+    }
+
+    public void setDeath(boolean death) {
+        this.death = death;
     }
 
     public synchronized void suseptable(String name){
@@ -269,6 +281,76 @@ public class Network extends Observable{
         super.notifyObservers();
     }
 
+    public synchronized void runForceOnce(double push, double pull, int wiggle){
+        for (Node n: nodes.values()){
+            n.forceMove( nodes.values(), push, pull);
+        }
 
+        scaledUpdate(5, wiggle);
+//        for (Node n: nodes.values()){
+//            n.updateLocation();
+//        }
+
+//        for (Node n: nodes.values()){
+//            System.out.println(n);
+//        }
+        resize();
+        super.setChanged();
+        super.notifyObservers();
+    }
+
+    public synchronized void runForce(int timeStep, double push, double pull, int wiggle){
+        this.Force = true;
+        ForceRunner runner = new ForceRunner(this, timeStep, push, pull, wiggle);
+        runner.start();
+    }
+
+    public boolean isForce() {
+        return Force;
+    }
+
+    public synchronized void stopForce(){
+        Force = false;
+    }
+
+    public void resize(){
+        int xMin = ((Node)this.nodes.values().toArray()[0]).getX();
+        int xMax = xMin;
+        int yMin = ((Node)this.nodes.values().toArray()[0]).getY();
+        int yMax = yMin;
+
+        for (Node n : this.nodes.values()){
+            if (xMin > n.getX()){
+                xMin = n.getX();
+            }else if (xMax < n.getX()) {
+                xMax = n.getX();
+            }
+            if (yMin > n.getY()){
+                yMin = n.getY();
+            }else if (yMax < n.getY()) {
+                yMax = n.getY();
+            }
+        }
+//        System.out.println(xMin + "-" + xMax + " " + yMin + "-" + yMax);
+
+        for (Node n: this.nodes.values()){
+            n.setXY(((n.getX() - xMin) * (this.width - 2 * margin) / (xMax - xMin)) + margin, ((n.getY()  - yMin) * (this.height - 2 * margin)/ (yMax - yMin)) + margin);
+
+        }
+        super.setChanged();
+        super.notifyObservers();
+    }
+
+    public void scaledUpdate(int Delta, int wiggle){
+        int xMax = 0;
+        int yMax = 0;
+        for (Node n:this.nodes.values()){
+            xMax = (int)Math.max(xMax, n.getFxdiff());
+            yMax = (int)Math.max(yMax, n.getFydiff());
+        }
+        for (Node n :this.nodes.values()){
+            n.scaledUpdateLocation(xMax, yMax, Delta, wiggle);
+        }
+    }
 }
 

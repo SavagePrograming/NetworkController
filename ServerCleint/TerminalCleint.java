@@ -5,6 +5,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Network.Protocol;
+
 public class TerminalCleint{
     final String READ = "Read";
     final int WIDTH = 400;

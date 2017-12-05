@@ -1,5 +1,8 @@
 package Network;
 
+import sun.nio.cs.ext.MacThai;
+
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Node{
@@ -7,6 +10,8 @@ public class Node{
     private String name;
     private int x;
     private int y;
+    private double fx;
+    private double fy;
     private State state;
     private State future;
     private int timeCounter;
@@ -37,6 +42,10 @@ public class Node{
         this.state = state;
         x = 100;
         y = 100;
+    }
+
+    public double getDistance(Node n){
+        return Math.sqrt(Math.pow((n.x - this.x), 2) + Math.pow((n.y - this.y), 2));
     }
     
     public void spreadInfection(double probability, int maxTime, int minTime){
@@ -125,6 +134,81 @@ public class Node{
         this.x = x;
         this.y = y;
     }
+
+    public void forceMove(Collection<Node> nodes, double push, double pull){
+
+        this.fx = 0;
+        this.fy = 0;
+        for (Node n:nodes){
+            if (!n.equals(this)) {
+                if (!(Math.abs(n.x - this.x) == 0)){
+                    this.fx += push / Math.pow((n.x - this.x), 2) * (n.x - this.x)/ Math.abs((n.x - this.x)); // / nodes.size()
+                }
+                if (!(Math.abs(n.y - this.y) == 0)){
+                    this.fy += push / Math.pow((n.y - this.y), 2) * ( (n.y - this.y)/ Math.abs((n.y - this.y)))  ;// nodes.size();
+                }
+                if (!(Math.abs(n.x - this.x) == 0)) {
+                    System.out.print("Push (X: " + this.x + " " + n.x + " " + -push / Math.pow((n.x - this.x), 2) * (n.x - this.x) / Math.abs((n.x - this.x)));
+                }else{
+                    System.out.print("Push (X: Zeroed");
+                }
+                if (!(Math.abs(n.y - this.y) == 0)) {
+                    System.out.println( " , Y: "+ this.y + " " + n.y + " " + -push / Math.pow((n.y - this.y), 2) * ( (n.y - this.y)/ Math.abs((n.y - this.y))) + ")");
+                }else{
+                    System.out.println(" , Y: Zeroed)");
+                }
+//                System.out.println("Push " + this.fx + " " + this.fx);
+            }
+        }
+        for (Node n:this.nodes.values()){
+            if (n != this) {
+                if (!(Math.abs(n.x - this.x) == 0)){
+                    this.fx += pull * Math.pow((n.x - this.x), 2) * ((n.x - this.x) / Math.abs(n.x - this.x));// this.nodes.size();
+                }
+                if (!(Math.abs(n.y - this.y) == 0)){
+                    this.fy += pull * Math.pow((n.y - this.y), 2) * ((n.y - this.y) / Math.abs(n.y - this.y)) ;// this.nodes.size();
+                }
+                if (!(Math.abs(n.x - this.x) == 0)) {
+                    System.out.print("Pull (X: " + this.x + " " + n.x + " " + pull * Math.pow((n.x - this.x), 2) * ((n.x - this.x) / Math.abs(n.x - this.x)));
+                }else{
+                    System.out.print("Pull (X: Zeroed");
+                }
+                if (!(Math.abs(n.y - this.y) == 0)) {
+                    System.out.println( " , Y: "+ this.y + " " + n.y + " " + pull * Math.pow((n.y - this.y), 2) * ((n.y - this.y) / Math.abs(n.y - this.y))+ ")");
+                }else{
+                    System.out.println( " , Y: Zeroed)");
+                }
+            }
+        }
+    }
+    public void scaledUpdateLocation(int xMax, int yMax, int delta,  int wiggle){
+        System.out.println((int) (delta * this.fx / (double)xMax));
+        System.out.println(delta * this.fy / (double)yMax);
+        this.x += (int) (delta * this.fx / (double)xMax + Math.random() * 2 * wiggle - wiggle);
+        this.y += (int) (delta * this.fy / (double)yMax + Math.random() * 2 * wiggle - wiggle);
+    }
+
+    public double getFxdiff(){
+        return Math.abs(this.fx);
+    }
+
+    public double getFydiff(){
+        return Math.abs(this.fy);
+    }
+
+    public void updateLocation(){
+        this.x += (int)this.fx;
+        this.y += (int)this.fy;
+    }
+
+    public double getFx() {
+        return fx;
+    }
+
+    public double getFy() {
+        return fy;
+    }
 }
+
 
 

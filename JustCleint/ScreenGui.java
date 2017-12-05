@@ -267,13 +267,6 @@ public class ScreenGui extends Application implements Observer {
             GraphicsContext gc = canvas.getGraphicsContext2D();
             gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
 
-
-            for (Node n: ((Network) o).getNodes().values()){
-//                System.out.println(n);
-//                System.out.println((n.getX() - SIZE / 2) + "  " +( n.getY() - SIZE / 2 )+ "  " +  SIZE + "  " +  SIZE);
-                setFillColor(n.getState(), gc);
-                gc.fillOval(n.getX() - SIZE / 2, n.getY() - SIZE / 2, SIZE, SIZE);
-            }
             if (((Network) o).isConnections()) {
                 gc.setFill(Color.HONEYDEW);
                 for (Node n : ((Network) o).getNodes().values()) {
@@ -285,12 +278,19 @@ public class ScreenGui extends Application implements Observer {
                 }
             }
 
+
+            for (Node n: ((Network) o).getNodes().values()){
+//                System.out.println(n);
+//                System.out.println((n.getX() - SIZE / 2) + "  " +( n.getY() - SIZE / 2 )+ "  " +  SIZE + "  " +  SIZE);
+                setFillColor(n.getState(), gc);
+                gc.fillOval(n.getX() - SIZE / 2, n.getY() - SIZE / 2, SIZE, SIZE);
+            }
             if (((Network) o).isText()) {
                 gc.setFill(Color.BLUE);
                 for (Node n : ((Network) o).getNodes().values()) {
 //                System.out.println(n);
 //                System.out.println((n.getX() - SIZE / 2) + "  " +( n.getY() - SIZE / 2 )+ "  " +  SIZE + "  " +  SIZE);
-                    gc.fillText(n.getName(), n.getX() - SIZE / 2, n.getY() - SIZE / 2 + SIZE / 4);
+                    gc.fillText(n.getName() + "(" + n.getX() + " " + n.getFx() + ", " + n.getY() + " " + n.getFy() + ")", n.getX() - SIZE / 2, n.getY() - SIZE / 2 + SIZE / 4);
                 }
             }
         }

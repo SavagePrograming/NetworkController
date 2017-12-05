@@ -68,6 +68,28 @@ public class Controller {
         this.network.setDim( rows, cols );
     }
 
+    public void force(String arguments){
+        String[] args = arguments.split(" ");
+        double push = Double.parseDouble(args[0]);
+        double pull = Double.parseDouble(args[1]);
+        int wiggle = Integer.parseInt(args[2]);
+        System.out.println(push + " " + pull);
+        this.network.runForceOnce(push, pull, wiggle);
+    }
+
+    public void startforce(String arguments){
+        String[] args = arguments.split(" ");
+        int time = Integer.parseInt(args[0]);
+        double push = Double.parseDouble(args[1]);
+        double pull = Double.parseDouble(args[2]);
+        int wiggle = Integer.parseInt(args[3]);
+        this.network.runForce(time, push, pull, wiggle);
+    }
+
+    public void stopforce(){
+        this.network.stopForce();
+    }
+
     public void connect(String arguments ){
         String fields[] = arguments.trim().split( " " );
         String name1 =  fields[ 0 ];
@@ -172,6 +194,11 @@ public class Controller {
     public void connectionsOnOff( ) {
         this.network.setConnections(!this.network.isConnections());
     }
+
+    public void deathOnOff( ) {
+        this.network.setDeath(!this.network.isDeath());
+    }
+
     public void textOnOff() {
         this.network.setText(!this.network.isText());
     }
@@ -211,7 +238,8 @@ public class Controller {
                 command.equals(Protocol.START) || command.equals(Protocol.STOP) || command.equals(Protocol.ONOFF) ||
                 command.equals(Protocol.TEXT) || command.equals(Protocol.CONNECTIONS) ||
                 command.equals(Protocol.INFECTED) || command.equals(Protocol.DEAD) || command.equals(Protocol.IMMUNE) ||
-                command.equals(Protocol.SUSCEPTIBLE) || command.equals(Protocol.RESISTANCE);
+                command.equals(Protocol.FORCE) || command.equals(Protocol.FORCESTART) || command.equals(Protocol.FORCESTOP) ||
+                command.equals(Protocol.SUSCEPTIBLE) || command.equals(Protocol.RESISTANCE) || command.equals(Protocol.DEATH);
     }
 
     public boolean command(String input){
@@ -301,6 +329,9 @@ public class Controller {
                 case Protocol.MOVE:
                     move(arguments);
                     break;
+                case Protocol.DEATH:
+                    deathOnOff();
+                    break;
                 case Protocol.EXIT:
                     close();
                     break;
@@ -325,6 +356,15 @@ public class Controller {
                     break;
                 case Protocol.DEAD:
                     this.dead(arguments);
+                    break;
+                case Protocol.FORCE:
+                    this.force(arguments);
+                    break;
+                case Protocol.FORCESTART:
+                    this.startforce(arguments);
+                    break;
+                case Protocol.FORCESTOP:
+                    this.stopforce();
                     break;
                 case Protocol.IMMUNE:
                     this.immune(arguments);
