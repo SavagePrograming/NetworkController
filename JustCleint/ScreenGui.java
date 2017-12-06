@@ -25,7 +25,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class ScreenGui extends Application implements Observer {
-    final int SIZE = 10;
+    final int SIZE = 15;
     final int WIDTH = 500;
     final int HEIGHT = 500;
     final int MEMORYLIMIT = -1;
