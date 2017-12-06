@@ -25,7 +25,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class ScreenGui extends Application implements Observer {
-    final int SIZE = 20;
+    final int SIZE = 10;
     final int WIDTH = 500;
     final int HEIGHT = 500;
     final int MEMORYLIMIT = -1;
@@ -290,7 +290,7 @@ public class ScreenGui extends Application implements Observer {
                 for (Node n : ((Network) o).getNodes().values()) {
 //                System.out.println(n);
 //                System.out.println((n.getX() - SIZE / 2) + "  " +( n.getY() - SIZE / 2 )+ "  " +  SIZE + "  " +  SIZE);
-                    gc.fillText(n.getName() + "(" + n.getX() + " " + n.getFx() + ", " + n.getY() + " " + n.getFy() + ")", n.getX() - SIZE / 2, n.getY() - SIZE / 2 + SIZE / 4);
+                    gc.fillText(n.getName(), n.getX() - SIZE / 2, n.getY() - SIZE / 2 + SIZE / 4);
                 }
             }
         }

@@ -2,6 +2,7 @@ package JustCleint;
 
 import Network.Network;
 import Network.Protocol;
+import Network.ForceRunner;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -27,6 +28,7 @@ public class Controller {
      * The {@link Network} used to keep track of the state of the network.
      */
     private Network network;
+    private ArrayList<ForceRunner> forceRunners;
 
 
     private boolean go;
@@ -53,6 +55,7 @@ public class Controller {
      */
     public Controller(int width, int height, Network model, Map<String, String> params){
         this.network = model;
+        System.out.println(width + " " + height);
         this.initialConnect(width, height);
     }
 

@@ -12,7 +12,7 @@ public class Network extends Observable{
     private boolean death = true;
     private boolean On;
     private boolean Active;
-    private boolean Text = true;
+    private boolean Text = false;
     private boolean Connections = true;
     public final int minTime = 5;
     public final int maxTime = 10;
@@ -232,6 +232,11 @@ public class Network extends Observable{
 
     public synchronized  void delete(String name){
         this.nodes.remove(name);
+        for (Node n: this.nodes.values()){
+            if ( n.getNodes().containsKey(name)){
+                n.getNodes().remove(name);
+            }
+        }
         super.setChanged();
         super.notifyObservers();
     }
@@ -286,7 +291,7 @@ public class Network extends Observable{
             n.forceMove( nodes.values(), push, pull);
         }
 
-        scaledUpdate(5, wiggle);
+        scaledUpdate(10, wiggle);
 //        for (Node n: nodes.values()){
 //            n.updateLocation();
 //        }
